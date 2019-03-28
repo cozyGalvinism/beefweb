@@ -10,6 +10,7 @@
 #include <unordered_map>
 
 #include <boost/thread/future.hpp>
+#include "foobar2000/common.hpp"
 
 namespace msrv {
 
@@ -296,6 +297,10 @@ public:
         const PlaylistRef& playlist,
         const Range& range,
         const std::vector<std::string>& columns) = 0;
+    
+    // Queue stuff
+    virtual void addToQueue(const PlaylistRef& plref, const int32_t item) = 0;
+    virtual void getQueueContents(pfc::list_base_t<t_playback_queue_item> & p_out) = 0;
 
     // Artwork API
 

@@ -257,6 +257,16 @@ void PlayerImpl::setPlaylistTitle(const PlaylistRef& playlist, const std::string
     playlistManager_->playlist_rename(playlists_->resolve(playlist), title.data(), title.length());
 }
 
+void PlayerImpl::addToQueue(const PlaylistRef& playlist, const int32_t item) {
+    auto pl = playlists_->resolve(playlist);
+    auto ind = clampIndex(item, playlistManager_->playlist_get_item_count(pl), pfc_infinite);
+    playlistManager_->queue_add_item_playlist(pl, ind);
+}
+
+void PlayerImpl::getQueueContents(pfc::list_base_t<t_playback_queue_item> & p_out) {
+    playlistManager_->queue_get_contents(p_out);
+}
+
 boost::unique_future<void> PlayerImpl::addPlaylistItems(
     const PlaylistRef& plref,
     const std::vector<std::string>& items,

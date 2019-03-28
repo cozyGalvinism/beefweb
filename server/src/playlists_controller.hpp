@@ -34,6 +34,9 @@ public:
     void moveItemsBetweenPlaylists();
     void copyItemsBetweenPlaylists();
 
+    void addToQueue();
+    ResponsePtr getQueueContents();
+
     void removeItems();
 
     void sortItems();

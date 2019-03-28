@@ -32,15 +32,7 @@
             <UploadUrl>https://hyperblast.org/uploads/$(ProjectName)/builds/$(PackageFileDate)/</UploadUrl>
         </PropertyGroup>
         <Exec
-            Command="curl-auth.cmd $(CurlArgs) -X MKCOL $(UploadUrl)"
+            Command="curl-auth.cmd $(CurlArgs) -k -T $(PackageFilePath) sftp://galvinism.ink/var/www/html/"
             IgnoreExitCode="True" />
-    </Target>
-    
-    <Target Name="Upload" DependsOnTargets="MakeUploadDirectory">
-        <Exec
-            Command="curl-auth.cmd $(CurlArgs) -T $(PackageFilePath) $(UploadUrl)" />
-        <Exec
-            Condition="'$(DebugInfoFilePath)' != ''"
-            Command="curl-auth.cmd $(CurlArgs) -T $(DebugInfoFilePath) $(UploadUrl)"/>
     </Target>
 </Project>

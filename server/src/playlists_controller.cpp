@@ -240,7 +240,7 @@ void PlaylistsController::defineRoutes(Router* router, WorkQueue* workQueue, Pla
 
     routes.get(":plref/items/:range", &PlaylistsController::getPlaylistItems);
 
-    routes.post(":plref/queue/add", &PlaylistsController::addToQueue);
+    routes.post(":plref/:index/queue/add", &PlaylistsController::addToQueue);
 }
 
 }

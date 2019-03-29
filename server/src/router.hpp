@@ -7,6 +7,8 @@
 #include <functional>
 #include <unordered_map>
 #include <memory>
+#include "log.hpp"
+#include <sstream>
 
 namespace msrv {
 
@@ -78,6 +80,9 @@ public:
 
     void define(HttpMethod method, const std::string& path, ControllerAction<T> action)
     {
+        std::stringstream ss;
+        ss << "Defining route " << path << "...";
+        logInfo(ss.str());
         assert(factory_);
         assert(workQueue_);
 
@@ -90,16 +95,25 @@ public:
 
     void get(const std::string& path, ControllerAction<T> action)
     {
+        std::stringstream ss;
+        ss << "Defining GET route " << path << "...";
+        logInfo(ss.str());
         define(HttpMethod::GET, path, action);
     }
 
     void post(const std::string& path, ControllerAction<T> action)
     {
+        std::stringstream ss;
+        ss << "Defining POST route " << path << "...";
+        logInfo(ss.str());
         define(HttpMethod::POST, path, action);
     }
 
     void post(const std::string& path, std::function<void(T*)> action)
     {
+        std::stringstream ss;
+        ss << "Defining POST route " << path << "...";
+        logInfo(ss.str());
         define(HttpMethod::POST, path, [=] (T* controller) {
             action(controller);
             return Response::ok();

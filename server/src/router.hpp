@@ -82,7 +82,9 @@ public:
     {
         std::stringstream ss;
         ss << "Defining route " << path << "...";
-        logInfo(ss.str());
+        char cstr[ss.str().size() + 1];
+        strcpy(cstr, ss.str().c_str());
+        logInfo(cstr);
         assert(factory_);
         assert(workQueue_);
 
@@ -97,7 +99,9 @@ public:
     {
         std::stringstream ss;
         ss << "Defining GET route " << path << "...";
-        logInfo(ss.str());
+        char cstr[ss.str().size() + 1];
+        strcpy(cstr, ss.str().c_str());
+        logInfo(cstr);
         define(HttpMethod::GET, path, action);
     }
 
@@ -105,7 +109,9 @@ public:
     {
         std::stringstream ss;
         ss << "Defining POST route " << path << "...";
-        logInfo(ss.str());
+        char cstr[ss.str().size() + 1];
+        strcpy(cstr, ss.str().c_str());
+        logInfo(cstr);
         define(HttpMethod::POST, path, action);
     }
 
@@ -113,7 +119,9 @@ public:
     {
         std::stringstream ss;
         ss << "Defining POST route " << path << "...";
-        logInfo(ss.str());
+        char cstr[ss.str().size() + 1];
+        strcpy(cstr, ss.str().c_str());
+        logInfo(cstr);
         define(HttpMethod::POST, path, [=] (T* controller) {
             action(controller);
             return Response::ok();

@@ -54,6 +54,7 @@ ResponsePtr PlaylistsController::getPlaylistItems()
 }
 
 void PlaylistsController::addToQueue() {
+    logInfo("Add to queue...");
     auto plref = param<PlaylistRef>("plref");
     auto item = param<int32_t>("index");
 
@@ -240,6 +241,7 @@ void PlaylistsController::defineRoutes(Router* router, WorkQueue* workQueue, Pla
 
     routes.get(":plref/items/:range", &PlaylistsController::getPlaylistItems);
 
+    logInfo("Loading custom addToQueue controller...");
     routes.post(":plref/:index/queue/add", &PlaylistsController::addToQueue);
 }
 

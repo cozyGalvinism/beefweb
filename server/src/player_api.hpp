@@ -11,6 +11,9 @@
 
 #include <boost/thread/future.hpp>
 #include "foobar2000/common.hpp"
+#include "json.hpp"
+
+using nlohmann::json;
 
 namespace msrv {
 
@@ -97,6 +100,16 @@ struct QueueItem {
     int32_t id;
     std::string playlistId;
     int32_t itemIndex;
+
+    void to_json(json& j, const QueueItem& item) {
+        j = json{{"id", item.id}, {"playlistId", item.playlistId}, {"itemIndex", item.itemIndex}};
+    }
+
+    void from_json(const json& j, QueueItem& item) {
+        j.at("id").get<int32_t>();
+        j.at("playlistId").get<std::string>();
+        j.at("itemIndex").get<int32_t>();
+    }
 };
 
 struct PlaylistItemInfo

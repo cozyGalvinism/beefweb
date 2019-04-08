@@ -94,6 +94,7 @@ set(
     player_controller.cpp player_controller.hpp
     player_events.cpp player_events.hpp
     playlists_controller.cpp playlists_controller.hpp
+    queue_controller.cpp queue_controller.hpp
     project_info.hpp
     query_controller.cpp query_controller.hpp
     request.cpp request.hpp

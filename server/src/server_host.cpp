@@ -8,6 +8,7 @@
 #include "cache_support_filter.hpp"
 #include "compression_filter.hpp"
 #include "basic_auth_filter.hpp"
+#include "queue_controller.hpp"
 
 namespace msrv {
 
@@ -25,6 +26,7 @@ ServerHost::ServerHost(Player* player)
     PlaylistsController::defineRoutes(&router_, playerWorkQueue_.get(), player_, this);
     QueryController::defineRoutes(&router_, playerWorkQueue_.get(), player_, &dispatcher_);
     ArtworkController::defineRoutes(&router_, playerWorkQueue_.get(), player_, &ctmap_);
+    QueueController::defineRoutes(&router_, playerWorkQueue_.get(), player_, this);
     BrowserController::defineRoutes(&router_, &utilityQueue_, this);
     StaticController::defineRoutes(&router_, &utilityQueue_, this, &ctmap_);
 

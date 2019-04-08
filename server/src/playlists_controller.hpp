@@ -34,8 +34,6 @@ public:
     void moveItemsBetweenPlaylists();
     void copyItemsBetweenPlaylists();
 
-    void addToQueue();
-
     void removeItems();
 
     void sortItems();

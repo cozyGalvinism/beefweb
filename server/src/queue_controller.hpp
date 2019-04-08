@@ -16,6 +16,9 @@ public:
     ~QueueController();
 
     void addToQueue();
+    void removeFromQueue();
+    void moveUp();
+    ResponsePtr getQueue();
 
     static void defineRoutes(Router* router, WorkQueue* workQueue, Player* player, SettingsStore* store);
 

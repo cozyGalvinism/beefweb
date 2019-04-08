@@ -151,6 +151,67 @@ void PlayerImpl::makeItemsMask(
     mask->presort();
 }
 
+void PlayerImpl::makeQueueItemsMask(
+    const std::vector<int32_t>& indexes,
+    pfc::bit_array_flatIndexList* mask)
+{
+    auto count = playlistManager_->queue_get_count();
+
+    for (auto index : indexes)
+    {
+        if (index >= 0 && static_cast<t_size>(index) < count)
+            mask->add(index);
+    }
+
+    mask->presort();
+}
+
+std::vector<QueueItem> PlayerImpl::getQueueContents() {
+    playlists_->ensureInitialized();
+    auto count = playlistManager_->queue_get_count();
+
+    pfc::list_t<t_playback_queue_item> _items;
+
+    playlistManager_->queue_get_contents(_items);
+    std::vector<QueueItem> queueContents;
+    queueContents.reserve(count);
+
+    for(t_size i = 0; i < count; i++) {
+        QueueItem item;
+        t_playback_queue_item pbq_i = _items.get_item(i);
+
+        item.id = playlistManager_->queue_find_index(pbq_i);
+        item.playlistId = playlists_->getId(pbq_i.m_playlist);
+        item.itemIndex = (int32_t)pbq_i.m_item;
+
+        queueContents.emplace_back(std::move(item));
+    }
+
+    return queueContents;
+}
+
+void PlayerImpl::moveQueueItem(QueueItem& item) {
+    auto count = playlistManager_->queue_get_count();
+    if(count <= 0) return;
+    auto _contents = getQueueContents();
+
+    std::vector<int32_t> toRemove;
+    toRemove.reserve(count);
+    for(t_size i = 0; i < count; i++) {
+        toRemove.emplace_back(_contents.at(i).id);
+    }
+
+    auto it = _contents.begin() + item.id;
+    std::rotate(_contents.begin(), it, it+1);
+
+    removeFromQueue(toRemove);
+    for(t_size i = 0; i < count; i++) {
+        auto itm = _contents.at(i);
+        PlaylistRef pref = PlaylistRef(itm.playlistId);
+        addToQueue(pref, itm.itemIndex);
+    }
+}
+
 std::vector<PlaylistInfo> PlayerImpl::getPlaylists()
 {
     playlists_->ensureInitialized();
@@ -263,8 +324,12 @@ void PlayerImpl::addToQueue(const PlaylistRef& playlist, const int32_t item) {
     playlistManager_->queue_add_item_playlist(pl, ind);
 }
 
-void PlayerImpl::getQueueContents(pfc::list_base_t<t_playback_queue_item> & p_out) {
-    playlistManager_->queue_get_contents(p_out);
+void PlayerImpl::removeFromQueue(
+    const std::vector<int32_t>& itemIndexes)
+{
+    pfc::bit_array_flatIndexList items;
+    makeQueueItemsMask(itemIndexes, &items);
+    playlistManager_->queue_remove_mask(items);
 }
 
 boost::unique_future<void> PlayerImpl::addPlaylistItems(

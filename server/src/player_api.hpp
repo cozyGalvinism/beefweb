@@ -88,6 +88,17 @@ struct PlaylistInfo
     bool isCurrent;
 };
 
+struct QueueItem {
+    QueueItem() = default;
+    QueueItem(QueueItem&&) = default;
+    QueueItem& operator=(QueueItem&&) = default;
+    QueueItem(const QueueItem&) = default;
+
+    int32_t id;
+    std::string playlistId;
+    int32_t itemIndex;
+};
+
 struct PlaylistItemInfo
 {
     PlaylistItemInfo() = default;
@@ -300,7 +311,9 @@ public:
     
     // Queue stuff
     virtual void addToQueue(const PlaylistRef& plref, const int32_t item) = 0;
-    virtual void getQueueContents(pfc::list_base_t<t_playback_queue_item> & p_out) = 0;
+    virtual void removeFromQueue(const std::vector<int32_t>& items) = 0;
+    virtual std::vector<QueueItem> getQueueContents() = 0;
+    virtual void moveQueueItem(QueueItem& item) = 0;
 
     // Artwork API
 

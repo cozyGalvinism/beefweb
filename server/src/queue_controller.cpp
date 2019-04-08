@@ -43,6 +43,21 @@ namespace msrv {
         player_->addToQueue(plref, item);
     }
 
+    void QueueController::removeFromQueue() {
+        auto items = param<std::vector<int32_t>>("items");
+        player_->removeFromQueue(items);
+    }
+
+    ResponsePtr QueueController::getQueue() {
+        return Response::json({{ "queue", player_->getQueueContents() }});
+    }
+
+    void QueueController::moveUp() {
+        auto idx = param<int32_t>("index");
+        auto item = player_->getQueueContents().at(idx);
+        player_->moveQueueItem(item);
+    }
+
     void QueueController::defineRoutes(Router* router, WorkQueue* workQueue, Player* player, SettingsStore* store)
     {
         auto routes = router->defineRoutes<QueueController>();
@@ -56,7 +71,9 @@ namespace msrv {
 
         routes.setPrefix("api/queue");
 
-        logInfo("Loading custom addToQueue controller...");
-        routes.post(":plref/:plitem/queue/add", &QueueController::addToQueue);
+        routes.get("", &QueueController::getQueue);
+        routes.post("add/:plref/:plitem", &QueueController::addToQueue);
+        routes.post("remove", &QueueController::removeFromQueue);
+        routes.post("move/:index", &QueueController::moveUp);
     }
 }

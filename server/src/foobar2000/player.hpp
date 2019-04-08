@@ -82,7 +82,9 @@ public:
         const std::vector<std::string>& columns) override;
     
     virtual void addToQueue(const PlaylistRef& plref, const int32_t item) override;
-    virtual void getQueueContents(pfc::list_base_t<t_playback_queue_item> & p_out) override;
+    virtual std::vector<QueueItem> getQueueContents() override;
+    virtual void removeFromQueue(const std::vector<int32_t>& items) override;
+    virtual void moveQueueItem(QueueItem& item) override;
 
     virtual boost::unique_future<ArtworkResult> fetchArtwork(const ArtworkQuery& query) override;
 
@@ -114,6 +116,11 @@ private:
         t_size playlist,
         const std::vector<int32_t>& indexes,
         pfc::bit_array_flatIndexList* mask);
+    
+    void makeQueueItemsMask(
+        const std::vector<int32_t>& indexes,
+        pfc::bit_array_flatIndexList* mask
+    );
 
     bool playNextBy(const std::string& expression, int increment);
 

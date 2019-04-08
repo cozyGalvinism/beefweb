@@ -53,14 +53,6 @@ ResponsePtr PlaylistsController::getPlaylistItems()
     return Response::json({{ "playlistItems", items }});
 }
 
-void PlaylistsController::addToQueue() {
-    logInfo("Add to queue...");
-    auto plref = param<PlaylistRef>("plref");
-    auto item = param<int32_t>("plitem");
-
-    player_->addToQueue(plref, item);
-}
-
 void PlaylistsController::addPlaylist()
 {
     auto index = optionalParam<int32_t>("index", -1);
@@ -240,9 +232,6 @@ void PlaylistsController::defineRoutes(Router* router, WorkQueue* workQueue, Pla
     routes.post(":plref/:targetPlref/items/copy", &PlaylistsController::copyItemsBetweenPlaylists);
 
     routes.get(":plref/items/:range", &PlaylistsController::getPlaylistItems);
-
-    logInfo("Loading custom addToQueue controller...");
-    routes.post(":plref/:plitem/queue/add", &PlaylistsController::addToQueue);
 }
 
 }

@@ -139,4 +139,10 @@ void to_json(Json& json, const PlaylistItemsResult& value)
     json["items"] = value.items;
 }
 
+void to_json(Json& json, const QueueItem& item) {
+    json["id"] = item.id;
+    json["playlistId"] = item.playlistId;
+    json["itemIndex"] = item.itemIndex;
+}
+
 }

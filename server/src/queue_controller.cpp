@@ -36,7 +36,6 @@ namespace msrv {
     }
 
     void QueueController::addToQueue() {
-        logInfo("Add to queue...");
         auto plref = param<PlaylistRef>("plref");
         auto item = param<int32_t>("plitem");
 

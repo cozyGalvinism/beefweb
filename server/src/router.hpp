@@ -79,8 +79,6 @@ public:
 
     void define(HttpMethod method, const std::string& path, ControllerAction<T> action)
     {
-        std::string outp = "Defining route " + path;
-        logInfo(outp.c_str());
         assert(factory_);
         assert(workQueue_);
 
@@ -93,22 +91,16 @@ public:
 
     void get(const std::string& path, ControllerAction<T> action)
     {
-        std::string outp = "Defining GET route " + path;
-        logInfo(outp.c_str());
         define(HttpMethod::GET, path, action);
     }
 
     void post(const std::string& path, ControllerAction<T> action)
     {
-        std::string outp = "Defining POST route " + path;
-        logInfo(outp.c_str());
         define(HttpMethod::POST, path, action);
     }
 
     void post(const std::string& path, std::function<void(T*)> action)
     {
-        std::string outp = "Defining POST route " + path;
-        logInfo(outp.c_str());
         define(HttpMethod::POST, path, [=] (T* controller) {
             action(controller);
             return Response::ok();
